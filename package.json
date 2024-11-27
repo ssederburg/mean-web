@@ -1,0 +1,30 @@
+{
+  "name": "mean-web",
+  "version": "1.0.0",
+  "description": "MEAN stack server Node Express with API to Mongo",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node --project tsconfig.json ./src/index.ts",
+    "dev": "nodemon -exec 'ts-node' src/index.ts"
+  },
+  "author": "Steven Sederburg (stevens@cloudspacestudio.com)",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "helmet": "^8.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.0",
+    "@types/helmet": "^0.0.48",
+    "@types/node": "^22.10.0",
+    "@types/uuid": "^10.0.0"
+  }
+}
