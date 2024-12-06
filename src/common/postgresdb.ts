@@ -6,7 +6,7 @@ export class ContentPostgresDb {
     private _connected: boolean = false
     private _keepAliveTimer: any = null
 
-    private _alLTablesSql = `
+    private _allTablesSql = `
     select *
     from information_schema.tables t
     where t.table_schema = 'public'  -- put schema name here
@@ -51,7 +51,7 @@ export class ContentPostgresDb {
     getTableList(): Promise<QueryResult<any>> {
         return new Promise(async(resolve, reject) => {
             try {
-                const result = await this.execute(this._alLTablesSql)
+                const result = await this.execute(this._allTablesSql)
                 if (result) {
                     return resolve(result)
                 }

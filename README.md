@@ -15,3 +15,15 @@ The following .env (environment variables) are required to establish connections
 | PGHOST | Host name is the URL (or localhost) of the postgres database |
 | PGPORT | The port postgres is listening for requests on |
 | PGDATABASE | The database name for the postgres database |
+| SQLUSER | User to connect to sql server database |
+| SQLPWD | Above user's password |
+| SQLDB | Default database to connect to in sql server |
+| SQLSRV | Remote URI including protocol and port for sql server database |
+| JWTSECRET | When using JWT token generation techniques, use this value as the secret key used for JWT composition and verification |
+
+## DATABASE SUPPORT FOR DEVELOPMENT
+You can install local databases for free to use with development
+
+### SQL Server
+https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+
