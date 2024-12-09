@@ -1,7 +1,7 @@
-import { IPrinciple } from "../iprinciple";
+import { IPrincipal } from "../iprincipal";
 import { v4 } from "uuid";
 
-export class BasicPrinciple implements IPrinciple {
+export class BasicPrincipal implements IPrincipal {
     id: string = ''
     username: string = ''
     hash: string = ''

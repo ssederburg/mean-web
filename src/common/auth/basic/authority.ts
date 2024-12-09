@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken'
 import express from 'express'
 
 import { IAuthority } from "../iauthority";
-import { IPrinciple } from "../iprinciple";
-import { BasicPrinciple } from "./principle";
+import { IPrincipal } from "../iprincipal";
+import { BasicPrincipal } from "./principal";
 import { IPrincipleStorage } from '../iprinciplestorage';
 
 const secret = process.env.JWTSECRET || '123'
@@ -23,8 +23,8 @@ export class BasicAuthority implements IAuthority {
                 // TODO: Validate tenant
                 // TODO: Validate non-repeating username
                 const hashedPassword = await bcrypt.hash(password, 10)
-                const principle = new BasicPrinciple(username, hashedPassword, tenant)
-                const result: any = await this.setPrinciple(username, principle, tenant)
+                const principle = new BasicPrincipal(username, hashedPassword, tenant)
+                const result: any = await this.setPrincipal(username, principle, tenant)
                 if (result instanceof Error) throw result
                 delete result.hash
                 delete result.salt
@@ -41,7 +41,7 @@ export class BasicAuthority implements IAuthority {
                 if (!username || !password || !tenant) {
                     throw new Error(`Invalid parameters to login method`)
                 }
-                const principle = await this.getPrinciple(username, tenant)
+                const principle = await this.getPrincipal(username, tenant)
                 if (!principle) {
                     setTimeout(() => {
                         return resolve(false)
@@ -61,10 +61,10 @@ export class BasicAuthority implements IAuthority {
         })
     }
 
-    setPrinciple(username: string, value: IPrinciple, tenant: string): Promise<IPrinciple|Error> {
+    setPrincipal(username: string, value: IPrincipal, tenant: string): Promise<IPrincipal|Error> {
         return new Promise(async(resolve, reject) => {
             try {
-                const result = await this.storage.setPrinciple(username, value, tenant)
+                const result = await this.storage.setPrincipal(username, value, tenant)
                 return resolve(result)
             } catch (err) {
                 return reject(err)
@@ -72,10 +72,10 @@ export class BasicAuthority implements IAuthority {
         })
     }
 
-    getPrinciple(username: string, tenant: string): Promise<IPrinciple> {
+    getPrincipal(username: string, tenant: string): Promise<IPrincipal> {
         return new Promise(async(resolve, reject) => {
             try {
-                const result = await this.storage.getPrinciple(username, tenant)
+                const result = await this.storage.getPrincipal(username, tenant)
                 return resolve(result)
             } catch (err) {
                 return reject(err)
@@ -83,7 +83,7 @@ export class BasicAuthority implements IAuthority {
         })
     }
 
-    generateJwt(principle: IPrinciple): Promise<any> {
+    generateJwt(principle: IPrincipal): Promise<any> {
         return new Promise(async(resolve, reject) => {
             try {
                 if (!principle) {
@@ -130,7 +130,7 @@ export class BasicAuthority implements IAuthority {
                 if (!decoded) {
                     throw new Error(`Unauthorized`)
                 }
-                const response = await this.generateJwt(decoded as IPrinciple)
+                const response = await this.generateJwt(decoded as IPrincipal)
                 if (!response) {
                     throw new Error(`Unauthorized`)
                 }

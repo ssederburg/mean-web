@@ -1,8 +1,8 @@
-import { IPrinciple } from "./iprinciple"
+import { IPrincipal } from "./iprincipal"
 
 export interface IPrincipleStorage {
 
-    setPrinciple(username: string, value: IPrinciple, tenant: string): Promise<IPrinciple|Error>
-    getPrinciple(username: string, tenant: string): Promise<IPrinciple>
+    setPrincipal(username: string, value: IPrincipal, tenant: string): Promise<IPrincipal|Error>
+    getPrincipal(username: string, tenant: string): Promise<IPrincipal>
 
 }

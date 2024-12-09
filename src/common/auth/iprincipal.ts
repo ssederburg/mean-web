@@ -1,4 +1,4 @@
-export interface IPrinciple {
+export interface IPrincipal {
     id: string
     username: string
     hash: string
