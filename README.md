@@ -1,6 +1,9 @@
 # MEAN(S) Web
 Express JS implementation on Node JS supporting patterns for the serving of Angular SPA with REST apis communicating with both Mongo and any form of SQL server (MS Sql, Azure Sql, Postgres etc.)
 
+## Convention over Configuration
+Creating entities in the apis folder that implement the IRoutable interface will be automatically bootstrapped into the application at the time of startup. In this way consumers can extend this library and add content without collision with core framework components.
+
 ## CONFIG
 
 ### Simple Config Values
