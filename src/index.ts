@@ -6,8 +6,8 @@ import * as path from 'node:path'
 import 'dotenv/config'
 import { v4 } from 'uuid'
 import { ContentPostgresDb } from './common/postgresdb'
-import { ContentMongoDb, IMongoConfig } from './common/mongodb'
 import { PoolConfig } from 'pg'
+import { ContentMongoDb, IMongoConfig } from './common/mongodb'
 import { MsSqlServerDb, ISqlServerConfig } from './common/mssqldb'
 
 const app = express()
@@ -126,7 +126,7 @@ app.post('/api/register', (req, res) => {
                 })
             }
 
-            const result = await app.locals.sqlserver.query(`INSERT INTO dbo.principles(id, username, hash, tenant) VALUES('id', 'username', 'hash', 'tenantid')`)
+            const result = await app.locals.sqlserver.query(`INSERT INTO dbo.principals(id, username, hash, tenant) VALUES('id', 'username', 'hash', 'tenantid')`)
             if (!result) {
                 return res.status(400).send({
                     message: `Unable to register user in system`
