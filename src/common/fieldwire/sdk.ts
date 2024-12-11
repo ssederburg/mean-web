@@ -3,7 +3,7 @@ const apiKey = process.env.fieldwire
 export class FieldwireSDK {
 
     private _jwtToken: any = null
-    private _rootUrl = `https://client-api.us.fieldwire.com/api/v3/`
+    private _regionUrl = `https://client-api.us.fieldwire.com/api/v3/`
 
     private _getJwtToken(): any {
         return new Promise(async(resolve, reject) => {
@@ -35,7 +35,7 @@ export class FieldwireSDK {
                 if (!this._jwtToken) {
                     await this._getJwtToken()
                 }
-                const url = `${this._rootUrl}${path}`
+                const url = `${this._regionUrl}${path}`
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
