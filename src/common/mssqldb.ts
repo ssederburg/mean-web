@@ -22,7 +22,7 @@ export class MsSqlServerDb {
         })
     }
 
-    query(statement: string) {
+    query(statement: string): Promise<mssql.IResult<any>> {
         return new Promise(async(resolve, reject) => {
             try {
                 const pool: mssql.ConnectionPool = await this.init()

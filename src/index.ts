@@ -95,6 +95,7 @@ app.get('/api/postgres/tables', (req, res) => {
         }
     })
 })
+
 app.get('/api/mongodb/collections', (req, res) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -108,28 +109,6 @@ app.get('/api/mongodb/collections', (req, res) => {
             if (!result) {
                 return res.status(400).send({
                     message: `Unable to retrieve list of collections from mongodb`
-                })
-            }
-            return res.status(200).json(result)
-        } catch (err) {
-            console.error(err)
-            return res.status(500).json(err)
-        }
-    })
-})
-app.post('/api/register', (req, res) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            if (!app.locals.sqlserver) {
-                return res.status(400).json({
-                    message: `No SQL Server Database in application`
-                })
-            }
-
-            const result = await app.locals.sqlserver.query(`INSERT INTO dbo.principals(id, username, hash, tenant) VALUES('id', 'username', 'hash', 'tenantid')`)
-            if (!result) {
-                return res.status(400).send({
-                    message: `Unable to register user in system`
                 })
             }
             return res.status(200).json(result)

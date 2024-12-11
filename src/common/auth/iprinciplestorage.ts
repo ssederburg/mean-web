@@ -1,8 +1,9 @@
 import { IPrincipal } from "./iprincipal"
+import * as mssql from 'mssql'
 
 export interface IPrincipleStorage {
 
-    setPrincipal(username: string, value: IPrincipal, tenant: string): Promise<IPrincipal|Error>
-    getPrincipal(username: string, tenant: string): Promise<IPrincipal>
+    setPrincipal(value: IPrincipal): Promise<boolean|Error>
+    getPrincipal(username: string, tenant: string): Promise<mssql.IResult<IPrincipal>>
 
 }
