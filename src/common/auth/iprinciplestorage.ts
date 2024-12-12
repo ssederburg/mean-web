@@ -4,6 +4,6 @@ import * as mssql from 'mssql'
 export interface IPrincipleStorage {
 
     setPrincipal(value: IPrincipal): Promise<boolean|Error>
-    getPrincipal(username: string, tenant: string): Promise<mssql.IResult<IPrincipal>>
+    getPrincipal(username: string, tenant: string): Promise<IPrincipal>
 
 }

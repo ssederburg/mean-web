@@ -11,7 +11,24 @@ const secret = process.env.JWTSECRET || '123'
 
 export class BasicAuthority implements IAuthority {
 
-    constructor(private storage: IPrincipleStorage) {
+    constructor(private storage: IPrincipleStorage) {}
+
+    attachToExpress(app: express.Application) {
+        app.post('/register', (req: express.Request, res: express.Response) => {
+            const username = req.body.get('username')
+            const password = req.body.get('password')
+            const tenant = req.body.get('tenant')
+
+        })
+        app.post('/login', (req: express.Request, res: express.Response) => {
+            const username = req.body.get('username')
+            const password = req.body.get('password')
+            const tenant = req.body.get('tenant')
+
+        })
+        app.all('/api/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+            return this.verify(req, res, next)
+        })
     }
 
     register(username: string, password: string, tenant: string): Promise<any> {
@@ -24,7 +41,7 @@ export class BasicAuthority implements IAuthority {
                 // TODO: Validate non-repeating username
                 const hashedPassword = await bcrypt.hash(password, 10)
                 const principle = new BasicPrincipal(username, hashedPassword, tenant)
-                const result: any = await this.setPrincipal(username, principle, tenant)
+                const result: any = await this.setPrincipal(principle)
                 if (result instanceof Error) throw result
                 delete result.hash
                 delete result.salt
@@ -61,10 +78,10 @@ export class BasicAuthority implements IAuthority {
         })
     }
 
-    setPrincipal(username: string, value: IPrincipal, tenant: string): Promise<IPrincipal|Error> {
+    setPrincipal(value: IPrincipal): Promise<boolean|Error> {
         return new Promise(async(resolve, reject) => {
             try {
-                const result = await this.storage.setPrincipal(username, value, tenant)
+                const result = await this.storage.setPrincipal(value)
                 return resolve(result)
             } catch (err) {
                 return reject(err)
@@ -114,7 +131,7 @@ export class BasicAuthority implements IAuthority {
             }
             const anyreq: any = req
             anyreq.user = decoded
-            next()
+            return next()
         } catch (err) {
             return res.status(401).json({error: 'Invalid Token'})
         }
