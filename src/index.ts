@@ -5,10 +5,10 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import 'dotenv/config'
 import { v4 } from 'uuid'
-import { ContentPostgresDb } from './common/postgresdb'
+import { ContentPostgresDb } from './core/postgresdb'
 import { PoolConfig } from 'pg'
-import { ContentMongoDb, IMongoConfig } from './common/mongodb'
-import { MsSqlServerDb, ISqlServerConfig } from './common/mssqldb'
+import { ContentMongoDb, IMongoConfig } from './core/mongodb'
+import { MsSqlServerDb, ISqlServerConfig } from './core/mssqldb'
 
 const app = express()
 const port = process.env.PORT || 3000
