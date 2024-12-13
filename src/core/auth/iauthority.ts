@@ -3,7 +3,7 @@ import express from 'express'
 import * as mssql from 'mssql'
 
 export interface IAuthority {
-    attachToExpress(app: express.Application): void
+    attach(app: express.Application): void
     register(username: string, password: string, tenant: string): Promise<any>
     login(username: string, password: string, tenant: string): Promise<any> 
 

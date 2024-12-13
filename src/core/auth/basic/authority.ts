@@ -13,7 +13,7 @@ export class BasicAuthority implements IAuthority {
 
     constructor(private storage: IPrincipleStorage) {}
 
-    attachToExpress(app: express.Application) {
+    attach(app: express.Application) {
         app.post('/register', (req: express.Request, res: express.Response) => {
             const username = req.body.get('username')
             const password = req.body.get('password')
