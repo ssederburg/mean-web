@@ -27,6 +27,28 @@ if (process.env.MONGOURL) {
     }
     const mongoDb = new ContentMongoDb(mongoConfig)
     app.locals.mongoDb = mongoDb
+    app.get('/api/mongodb/collections', (req, res) => {
+        return new Promise(async(resolve, reject) => {
+            try {
+                if (!app.locals.mongoDb) {
+                    return res.status(400).json({
+                        message: `No Mongo Database in application`
+                    })
+                }
+
+                const result = await app.locals.mongoDb.collectionsDetailed()
+                if (!result) {
+                    return res.status(400).send({
+                        message: `Unable to retrieve list of collections from mongodb`
+                    })
+                }
+                return res.status(200).json(result)
+            } catch (err) {
+                console.error(err)
+                return res.status(500).json(err)
+            }
+        })
+    })
 }
 // #endregion
 
@@ -48,6 +70,29 @@ if (process.env.PGHOST) {
     }
     const postgresDb = new ContentPostgresDb(postgresConfig)
     app.locals.postgresDb = postgresDb    
+    app.get('/api/postgres/tables', (req, res) => {
+        return new Promise(async(resolve, reject) => {
+            try {
+                if (!app.locals.postgresDb) {
+                    return res.status(400).json({
+                        message: `No Postgres Database in application`
+                    })
+                }
+
+                const result = await app.locals.postgresDb.getTableList()
+                if (!result) {
+                    return res.status(400).send({
+                        message: `Unable to retrieve list of tables from postgresdb`
+                    })
+                }
+                return res.status(200).json(result)
+            } catch (err) {
+                console.error(err)
+                return res.status(500).json(err)
+            }
+        })
+    })
+
 }
 // #endregion
 
@@ -73,51 +118,8 @@ if (process.env.SQLSRV) {
 }
 // #endregion
 
-app.get('/api/postgres/tables', (req, res) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            if (!app.locals.postgresDb) {
-                return res.status(400).json({
-                    message: `No Postgres Database in application`
-                })
-            }
+// Read manifest and create endpoints
 
-            const result = await app.locals.postgresDb.getTableList()
-            if (!result) {
-                return res.status(400).send({
-                    message: `Unable to retrieve list of tables from postgresdb`
-                })
-            }
-            return res.status(200).json(result)
-        } catch (err) {
-            console.error(err)
-            return res.status(500).json(err)
-        }
-    })
-})
-
-app.get('/api/mongodb/collections', (req, res) => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            if (!app.locals.mongoDb) {
-                return res.status(400).json({
-                    message: `No Mongo Database in application`
-                })
-            }
-
-            const result = await app.locals.mongoDb.collectionsDetailed()
-            if (!result) {
-                return res.status(400).send({
-                    message: `Unable to retrieve list of collections from mongodb`
-                })
-            }
-            return res.status(200).json(result)
-        } catch (err) {
-            console.error(err)
-            return res.status(500).json(err)
-        }
-    })
-})
 
 app.all('/api/*', (req, res) => {
     res.sendStatus(404)
