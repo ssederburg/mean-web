@@ -1,4 +1,5 @@
 import { Pool, PoolConfig, QueryResult } from 'pg'
+import * as express from 'express'
 
 export class ContentPostgresDb {
 
@@ -23,6 +24,38 @@ export class ContentPostgresDb {
 
     constructor(private config: PoolConfig) {
         this.pool = new Pool(config)
+    }
+
+    attach(app: express.Application): Promise<any> {
+        return new Promise(async(resolve, reject) => {
+            try {
+                app.get('/api/postgres/tables', (req, res) => {
+                    return new Promise(async(resolve, reject) => {
+                        try {
+                            if (!app.locals.postgresdb) {
+                                return res.status(400).json({
+                                    message: `No Postgres Database in application`
+                                })
+                            }
+
+                            const result = await app.locals.postgresdb.getTableList()
+                            if (!result) {
+                                return res.status(400).send({
+                                    message: `Unable to retrieve list of tables from postgresdb`
+                                })
+                            }
+                            return res.status(200).json(result)
+                        } catch (err) {
+                            console.error(err)
+                            return res.status(500).json(err)
+                        }
+                    })
+                })
+                return resolve(true)
+            } catch (err) {
+                return reject(err)
+            }
+        })
     }
 
     execute(statement: string, values?: any[]): Promise<QueryResult<any>> {

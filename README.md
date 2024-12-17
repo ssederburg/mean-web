@@ -52,3 +52,38 @@ You can install local databases for free to use with development
 ### SQL Server
 https://www.microsoft.com/en-us/sql-server/sql-server-downloads
 
+## Manifest Pattern
+Create files in the workspaces directory that include in their name "manifest" and inherit (extend) BaseManifest class. They must export a default class that extends BaseManifest as demonstrated below
+````
+import * as express from 'express'
+
+import { AuthStrategy } from "../core/auth/authstrategy";
+import { BaseManifest } from "../core/routing/base.manifest";
+import { IManifestItem } from "../core/routing/imanifestitem";
+
+export default class TestManifest extends BaseManifest {
+
+    appname: string = 'test'
+    authStrategy: AuthStrategy = AuthStrategy.none
+    dependencies: string[] = []
+    items: IManifestItem[] = [
+        {
+            method: 'get',
+            path: '/api/test',
+            fx: (req: express.Request, res: express.Response) => {
+                return new Promise(async(resolve, reject) => {
+                    try {
+                        return res.status(200).json({
+                            message: 'Hello World'
+                        })
+                    } catch (err: Error|any) {
+                        return res.status(500).json({
+                            message: err && err.message ? err.message : err
+                        })
+                    }
+                })
+            }
+        }
+    ]
+}
+````

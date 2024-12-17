@@ -2,6 +2,7 @@ import { AggregateOptions, BulkWriteOptions,
     CountDocumentsOptions, Db, EstimatedDocumentCountOptions, 
     FindOneAndReplaceOptions, FindOneAndUpdateOptions, FindOptions, InsertManyResult, InsertOneOptions, 
     MongoClient, ReplaceOptions, UpdateOptions } from 'mongodb'
+import * as express from 'express'
 
 export { ObjectId } from 'mongodb'
 
@@ -32,6 +33,39 @@ export class ContentMongoDb {
                 return resolve(true)
             } catch (e: any) {
                 return reject(e)
+            }
+        })
+    }
+
+    public attach(app: express.Application): Promise<any> {
+        return new Promise(async(resolve, reject) => {
+            try {
+                app.get('/api/mongodb/collections', (req, res) => {
+                    return new Promise(async(resolve, reject) => {
+                        try {
+                            if (!app.locals.mongodb) {
+                                return res.status(400).json({
+                                    message: `No Mongo Database in application`
+                                })
+                            }
+
+                            const result = await app.locals.mongodb.collectionsDetailed()
+                            if (!result) {
+                                return res.status(400).send({
+                                    message: `Unable to retrieve list of collections from mongodb`
+                                })
+                            }
+                            return res.status(200).json(result)
+                        } catch (err) {
+                            console.error(err)
+                            return res.status(500).json(err)
+                        }
+                    })
+                })
+                return resolve(true)
+            } catch (err) {
+                console.error(err)
+                return reject(err)
             }
         })
     }

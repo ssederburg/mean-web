@@ -1,6 +1,6 @@
 {
   "name": "mean-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MEAN stack server Node Express with API to Mongo",
   "main": "index.ts",
   "scripts": {
