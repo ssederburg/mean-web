@@ -20,8 +20,13 @@ export class RouteResolver {
                 for (let filepath of files) {
                     const instance: BaseManifest = await Utils.loadClassInstance(filepath, 'BaseManifest', [])
                     if (instance && instance && instance.items && Array.isArray(instance.items) && instance.items.length > 0) {
+                        // Register dependencies if not already registered
+
+                        // Determine Verify Function
+                        const verify = this.authVerifyNone
                         for (let item of instance.items) {
-                            anyApp[item.method](item.path, item.fx)
+                            console.log(`Registered ${item.method}: ${item.path}`)
+                            anyApp[item.method](item.path, verify, item.fx)
                         }
                     }
                 }
@@ -30,6 +35,12 @@ export class RouteResolver {
                 console.error(err)
                 return reject(err)
             }
+        })
+    }
+
+    authVerifyNone(req: express.Request, res: express.Response, next: express.NextFunction): Promise<any> {
+        return new Promise(async(resolve, reject) => {
+            return next(null)
         })
     }
 
