@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs';
+import * as fssync from 'fs'
 import * as path from 'path';
 
 export class Utils {
@@ -86,5 +87,104 @@ export class Utils {
             }
         })
     }
+
+    /*
+        Asynchronously write data to a file on node fs and await closure before resolving
+    */
+    static writeFile(targetFilePath: string, data: any): Promise<boolean> {
+        return new Promise(async(resolve, reject) => {
+            try {
+                    const writeStream = await fs.open(targetFilePath, 'w');
+                    const result = JSON.stringify(data)
+                    try {
+                        await writeStream.write(result);
+                    } catch (innerErr) {
+                        console.error(innerErr)
+                    } finally {
+                        await writeStream.close();
+                        setTimeout(() => {
+                            return resolve(true)
+                        }, 1)
+    
+                    }
+            } catch (err) {
+                return reject(err)
+            }
+        })
+    }
+
+    // simple funtion to return all files including sub directories in a given path
+    static getAllFilePaths(directory: string): Promise<string[]> {
+        return new Promise(async(resolve, reject) => {
+            try {
+                const filePaths: string[] = [];
+
+                async function traverse(dir: string) {
+                    const entries = await fs.readdir(dir, { withFileTypes: true });
+            
+                    for (const entry of entries) {
+                        const fullPath = path.join(dir, entry.name);
+                        if (entry.isDirectory()) {
+                            // Recursively traverse subdirectories
+                            await traverse(fullPath);
+                        } else if (entry.isFile()) {
+                            // Add file paths to the result array
+                            filePaths.push(fullPath);
+                        }
+                    }
+                }
+            
+                await traverse(directory);
+                return resolve(filePaths);
+            } catch (err) {
+                return reject(err)
+            }
+        })
+    }
+
+    /*
+        SYNCHRONOUS
+        Ensures that a subdirectory exists within a root directory.
+        If the subdirectory does not exist, it creates it.
+    
+        @param rootDirectory - The root directory path.
+        @param subDirectoryName - The name of the subdirectory to check or create.
+    */
+    static ensureSubdirectoryExists(rootDirectory: string, subDirectoryName: string): Promise<boolean> {
+        return new Promise(async(resolve, reject) => {
+            // Resolve the full path to the subdirectory
+            const subDirectoryPath = path.join(rootDirectory, subDirectoryName);
+
+            try {
+                // Check if the path exists and is a directory
+                if (!fssync.existsSync(subDirectoryPath)) {
+                    fssync.mkdirSync(subDirectoryPath, { recursive: true }); // Create the directory if it doesn't exist
+                    console.log(`Directory created: ${subDirectoryPath}`);
+                    setTimeout(() => {
+                        return resolve(true)
+                    },10)
+                } else if (!fssync.lstatSync(subDirectoryPath).isDirectory()) {
+                    throw new Error(`The path ${subDirectoryPath} exists but is not a directory.`);
+                } else {
+                    console.log(`Directory already exists: ${subDirectoryPath}`);
+                    setTimeout(() => {
+                        return resolve(true)
+                    },10)
+                }
+            } catch (error: any) {
+                console.error(`Failed to ensure directory exists: ${error.message}`);
+                return reject(false)
+            }
+        })
+    }
+
+    // Given the input string, remove all instances of target array with empty string
+    static emptyAllInstances(input: string, targets: string[]): string {
+        let output = input
+        targets.forEach((item) => {
+            output = output.split(item).join('');
+        })
+        return output
+    }    
 
 }

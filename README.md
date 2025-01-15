@@ -46,6 +46,24 @@ If using SQL Server DB as a backend persistent datastore, these keys are require
 | SQLDB | Default database to connect to in sql server |
 | SQLSRV | Remote URI including protocol and port for sql server database |
 
+### ODBC SQL Server Database (necessary to call Fabric DataLake and DataWarehouse)
+If using ODBC driver for SQL Server to connect to Microsoft Fabric, these keys are required to connect and use that connection type.
+| name | note |
+|------|------|
+| CLIENTID | Azure Active Directory Service Principal Client Id |
+| SECRET | Registered application Service Principal secret |
+| ODBCSERVER | Remote URL for Fabric DataLake or DataWarehouse |
+| ODBCDB | Database name of DataLake or DataWarehouse typically the workspace name |
+
+### MSAL Token
+To gather an MSAL token for a Service Principal in Azure AD, the following keys are needed to call the getToken method of the MSALAuth object.
+| name | note |
+|------|------|
+| TENANTID | Azure Active Directory Tenant Id (GUID) |
+| CLIENTID | Azure Active Directory Service Principal Client Id |
+| SECRET | Registered application Service Principal secret |
+| SCOPES | Semi-colon delimited list of scope strings to use for token retrieval |
+
 ## DATABASE SUPPORT FOR DEVELOPMENT
 You can install local databases for free to use with development
 

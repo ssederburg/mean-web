@@ -10,6 +10,7 @@ import { PoolConfig } from 'pg'
 import { ContentMongoDb, IMongoConfig } from './datasources/mongodb'
 import { MsSqlServerDb, ISqlServerConfig } from './datasources/mssqldb'
 import { RouteResolver } from './routing/route.resolver'
+import { IOdbcDbConfig, OdbcDb } from './datasources/odbcsql'
 
 export class Bootstrap {
 
@@ -78,6 +79,18 @@ export class Bootstrap {
                     app.locals.sqlserver = sqlserver
                 }
                 // #endregion
+
+                // #region Odbc Sql Server Setup
+                if (process.env.ODBCSERVER) {
+                    const odbcConfig: IOdbcDbConfig = {
+                        clientId: process.env.CLIENTID||'',
+                        secret: process.env.SECRET||'',
+                        dbServer: process.env.ODBCSERVER||'', // process.env.DATALAKEURL||''
+                        database: process.env.ODBCDB||''
+                    }
+                    const odbcServer = new OdbcDb(odbcConfig)
+                    app.locals.odbc = odbcServer
+                }
 
                 // Read manifest and create endpoints
                 const resolver: RouteResolver = new RouteResolver(path.join(process.cwd(), 'src', 'workspaces'))

@@ -1,6 +1,6 @@
 {
   "name": "mean-web",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MEAN stack server Node Express with API to Mongo",
   "main": "index.ts",
   "scripts": {
@@ -10,6 +10,7 @@
   "author": "Steven Sederburg (stevens@cloudspacestudio.com)",
   "license": "ISC",
   "dependencies": {
+    "@azure/msal-node": "^3.0.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "bcryptjs": "^2.4.3",
@@ -20,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.11.0",
     "mssql": "^11.0.1",
+    "odbc": "^2.4.9",
     "pg": "^8.13.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
