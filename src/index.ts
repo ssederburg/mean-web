@@ -8,6 +8,6 @@ const bootstrapper: Bootstrap = new Bootstrap()
 
 bootstrapper.start().then((app: express.Application) => {
     app.listen(port, async() => {
-        console.log(`Express server started on port ${port}`)
+        console.log(`Web server started on port ${port}`)
     })
 })
