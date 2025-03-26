@@ -51,9 +51,28 @@ tester.getProductCategories().then(() => {
 })
 /*
 https://myeddie.edwardsfiresafety.com/Products/GetProductCategories with categoryID: -1
-https://myeddie.edwardsfiresafety.com/Products/GetProductCategories with categoryID: 12 "Fire Alarm Telephones"
+    ProductCategories[] {CategoryID, CategoryDisplayName}
+
+    https://myeddie.edwardsfiresafety.com/Products/GetProductCategories with categoryID: 12 "Fire Alarm Telephones"
+    ProductCategories[] {CategoryID, CategoryDisplayName} at a finer level e.g. Frontplates and Wallboxes, Telephone Handsets, Warden Stations
 
 https://myeddie.edwardsfiresafety.com/Products/GetProductsByCategory with categoryID: 392 "Frontplates and Wallboxes"
+    {AvailableShown, PriceShown, MSRPShown, PlaceOrder, Categories[] of ProductCategory above, Products[] of Product below}
+    {
+        ProductID, PartNumber, LongDescription, PrimaryImage, TradePrice, SalesPrice, ClearancePrice, FutureTradePrice, FutureMSRPEffectiveDate,
+        FurtureSalesPrice, FutureSalesEffectiveDate, QuantityAvailable, ProductOrderable, ReplacedBy, IsDiscontinued, IsTrainingProduct,
+        NonPurchasableMessage, TieredPricingAvailable
+    }
 
+https://myeddie.edwardsfiresafety.com/Products/GetProductMedia with productID of above product
+    {Media[] of Media below}
+    {
+        Disclaimer, MediaAccess, MediaFileName, MediaID, MediaTitle, MediaTypeName, MediaURL
+    }
 
+https://myeddie.edwardsfiresafety.com/Products/GetProductFeatures with productID of above product
+    {Features[] of Feature below}
+    {
+        FeatureName, FeatureValue
+    }
 */
