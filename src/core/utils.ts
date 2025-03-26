@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import * as fssync from 'fs'
 import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid'
 
 export class Utils {
 
@@ -23,6 +24,18 @@ export class Utils {
                 throw error;
             }
         })
+    }
+    static replaceAllInstances(inputString: string, char: string, replacement: string): string {
+        // Escape the character if it's a special regex character
+        const escapedChar = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
+        // Create a regex to match all instances of the character
+        const regex = new RegExp(escapedChar, 'g');
+      
+        // Replace all instances of the character with the replacement string
+        const resultString = inputString.replace(regex, replacement);
+      
+        return resultString;
     }
 
     /**
@@ -185,6 +198,18 @@ export class Utils {
             output = output.split(item).join('');
         })
         return output
-    }    
+    }
+
+    static getRandomIntBetween(min: number, max: number): number {
+        const lower = Math.ceil(min);
+        const upper = Math.floor(max);
+        return Math.floor(Math.random() * (upper - lower + 1)) + lower;
+    }
+
+    static newGuid() {
+        const rand = `${process.pid}-${process.ppid}-${Date.now()}`
+        return uuidv4()
+    }
+
 
 }
